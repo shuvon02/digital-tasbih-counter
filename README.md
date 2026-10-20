@@ -68,9 +68,11 @@ http://localhost:3000
 
 ## 📦 Android APK (Ready to Install)
 
-The native Android APK has been compiled and is ready for your mobile device:
+The native Android APK has been compiled and published:
 
-- **Direct File:** [`tasbih-pro.apk`](file:///d:/tasbih/tasbih-pro.apk) (3.88 MB)
+- **Direct GitHub Release Download:** [**Download `tasbih-pro.apk` (v1.0.0)**](https://github.com/shuvon02/digital-tasbih-counter/releases/download/v1.0.0/tasbih-pro.apk)
+- **GitHub Release Page:** [https://github.com/shuvon02/digital-tasbih-counter/releases/tag/v1.0.0](https://github.com/shuvon02/digital-tasbih-counter/releases/tag/v1.0.0)
+- **Local File in Repository:** [`tasbih-pro.apk`](file:///d:/tasbih/tasbih-pro.apk) (3.88 MB)
 - **Local Network Wi-Fi Download:** If your phone and PC are on the same Wi-Fi, open this URL on your phone browser:
   ```
   http://192.168.0.102:3000/tasbih-pro.apk
