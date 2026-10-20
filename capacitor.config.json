@@ -1,0 +1,9 @@
+{
+  "appId": "com.tasbih.pro",
+  "appName": "Tasbih Pro",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}

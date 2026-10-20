@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="emerald">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Tasbih & Digital Counter | Modern PWA</title>
+  <meta name="description" content="A clean, responsive, mobile-first digital counter and Tasbih web app with full-screen tap zone, target goal tracking, audio-haptic feedback, and celebration effects.">
+  <meta name="theme-color" content="#0d1b18">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tasbih Pro">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+  <!-- Google Fonts: Outfit and JetBrains Mono for pristine digital readability -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app" class="app-container">
+    <!-- Background Ambient Glow Effects -->
+    <div class="ambient-glow glow-top" aria-hidden="true"></div>
+    <div class="ambient-glow glow-bottom" aria-hidden="true"></div>
+
+    <!-- Header Bar (Compact & Sleek) -->
+    <header class="app-header" id="appHeader">
+      <div class="brand">
+        <div class="brand-logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <circle cx="12" cy="6" r="1.5" fill="currentColor"></circle>
+            <circle cx="12" cy="18" r="1.5" fill="currentColor"></circle>
+            <circle cx="6" cy="12" r="1.5" fill="currentColor"></circle>
+            <circle cx="18" cy="12" r="1.5" fill="currentColor"></circle>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">TASBIH PRO</h1>
+          <span class="brand-subtitle" id="statusBadge">Goal Inactive</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Sound Toggle -->
+        <button id="soundToggleBtn" class="icon-btn" aria-label="Toggle Sound" title="Sound Effects">
+          <svg id="soundOnIcon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+          <svg id="soundOffIcon" class="hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+
+        <!-- Haptic / Vibrate Toggle -->
+        <button id="hapticToggleBtn" class="icon-btn" aria-label="Toggle Haptic Feedback" title="Vibration Feedback">
+          <svg id="hapticIcon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="7" y="2" width="10" height="20" rx="3"></rect>
+            <line x1="2" y1="8" x2="4" y2="8"></line>
+            <line x1="2" y1="12" x2="4" y2="12"></line>
+            <line x1="2" y1="16" x2="4" y2="16"></line>
+            <line x1="20" y1="8" x2="22" y2="8"></line>
+            <line x1="20" y1="12" x2="22" y2="12"></line>
+            <line x1="20" y1="16" x2="22" y2="16"></line>
+          </svg>
+        </button>
+
+        <!-- Theme Switcher Menu -->
+        <button id="themeToggleBtn" class="icon-btn" aria-label="Change Theme" title="Theme">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- FULL SCREEN ACTIVE TAP ZONE -->
+    <main id="tapZone" class="tap-zone" role="button" tabindex="0" aria-label="Tap anywhere to count">
+      <!-- Floating Particles Container -->
+      <div id="particleContainer" class="particle-container" aria-hidden="true"></div>
+
+      <!-- Central Display Area with Progress Ring -->
+      <div class="display-container" id="displayContainer">
+        <!-- SVG Circular Progress Ring -->
+        <div class="progress-ring-wrapper">
+          <svg class="progress-ring" viewBox="0 0 320 320" width="300" height="300">
+            <defs>
+              <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="var(--accent-glow)" />
+                <stop offset="100%" stop-color="var(--accent-primary)" />
+              </linearGradient>
+              <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="8" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+            </defs>
+            <!-- Background Track -->
+            <circle class="ring-track" cx="160" cy="160" r="136" />
+            <!-- Active Animated Fill -->
+            <circle id="progressCircle" class="ring-fill" cx="160" cy="160" r="136" filter="url(#glowFilter)" />
+          </svg>
+
+          <!-- Core Numbers inside the ring -->
+          <div class="counter-content">
+            <div class="counter-label" id="counterLabel">TOTAL COUNT</div>
+            <div class="counter-value-wrapper">
+              <span id="counterValue" class="counter-value">0</span>
+            </div>
+            
+            <div class="target-meta" id="targetMeta">
+              <span class="meta-label">TARGET:</span>
+              <span id="targetValueDisplay" class="meta-value">NOT SET</span>
+            </div>
+
+            <!-- Percentage badge -->
+            <div class="progress-badge" id="progressBadge">
+              <span id="percentText">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Instructional Guidance Hint -->
+        <div class="tap-hint-wrapper">
+          <p id="tapHint" class="tap-hint">
+            <span class="pulse-dot"></span>
+            <span id="tapHintText">Tap anywhere on the screen</span>
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <!-- DOCKED BOTTOM CONTROL CARD -->
+    <footer class="control-card-wrapper" id="controlCardWrapper">
+      <div class="control-card" id="controlCard">
+        <!-- Drag Handle for Mobile Elegance -->
+        <div class="card-handle" aria-hidden="true"></div>
+
+        <!-- Target Preset Quick Chips -->
+        <div class="preset-chips-row">
+          <span class="preset-label">Quick:</span>
+          <div class="chips-scroll">
+            <button class="chip-btn" data-target="33">33</button>
+            <button class="chip-btn" data-target="99">99</button>
+            <button class="chip-btn" data-target="100">100</button>
+            <button class="chip-btn" data-target="313">313</button>
+            <button class="chip-btn" data-target="1000">1000</button>
+          </div>
+        </div>
+
+        <!-- Target Input & Action Buttons Form -->
+        <form id="targetForm" class="target-form" onsubmit="return false;">
+          <div class="input-group">
+            <label for="targetInput" class="input-label">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="6"></circle>
+                <circle cx="12" cy="12" r="2"></circle>
+              </svg>
+              Target
+            </label>
+            <div class="input-wrapper">
+              <input 
+                type="number" 
+                id="targetInput" 
+                class="target-input" 
+                placeholder="Enter goal (e.g. 33)" 
+                min="1" 
+                max="999999" 
+                inputmode="numeric" 
+                pattern="[0-9]*"
+                autocomplete="off"
+              >
+              <button type="button" id="clearInputBtn" class="clear-input-btn hidden" aria-label="Clear Input">&times;</button>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <!-- Set Target Button -->
+            <button type="button" id="setTargetBtn" class="btn btn-primary">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>Set Target</span>
+            </button>
+
+            <!-- Reset Button with Confirmation -->
+            <button type="button" id="resetBtn" class="btn btn-secondary">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                <path d="M3 3v5h5"></path>
+              </svg>
+              <span>Reset</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </footer>
+
+    <!-- MODAL 1: Target Required Warning Modal (Crucial requirement #3) -->
+    <div id="targetRequiredModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="targetRequiredTitle">
+      <div class="modal-card modal-warning-card animate-pop">
+        <div class="modal-icon-badge warning-badge">
+          <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <h3 id="targetRequiredTitle" class="modal-title">Target Goal Required!</h3>
+        <p class="modal-description">
+          Please set a target goal first to begin counting. Locking in a target keeps your session structured and focused.
+        </p>
+        <div class="modal-quick-chips">
+          <button class="quick-pick-btn" data-val="33">33</button>
+          <button class="quick-pick-btn" data-val="99">99</button>
+          <button class="quick-pick-btn" data-val="100">100</button>
+          <button class="quick-pick-btn" data-val="1000">1000</button>
+        </div>
+        <div class="modal-actions">
+          <button id="focusTargetBtn" class="btn btn-primary btn-full">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="2"></circle>
+            </svg>
+            <span>Set Target Goal</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 2: Reset Confirmation Modal -->
+    <div id="resetConfirmModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="resetModalTitle">
+      <div class="modal-card modal-danger-card animate-pop">
+        <div class="modal-icon-badge danger-badge">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+          </svg>
+        </div>
+        <h3 id="resetModalTitle" class="modal-title">Reset Counter?</h3>
+        <p class="modal-description" id="resetModalDesc">
+          Are you sure you want to clear your count of <strong id="resetCurrentCountNum">0</strong>? All current progress will be wiped.
+        </p>
+        <div class="modal-actions-row">
+          <button id="cancelResetBtn" class="btn btn-secondary">Cancel</button>
+          <button id="confirmResetBtn" class="btn btn-danger">Yes, Reset</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 3: Celebration Goal Reached Modal -->
+    <div id="celebrationModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="celebrationTitle">
+      <div class="modal-card modal-celebrate-card animate-pop">
+        <div class="modal-icon-badge celebrate-badge">
+          <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </div>
+        <span class="celebrate-pill">TARGET COMPLETED</span>
+        <h3 id="celebrationTitle" class="modal-title celebrate-heading">Masha'Allah! Goal Reached</h3>
+        <p class="modal-description" id="celebrateDesc">
+          You have successfully completed <strong id="celebrateTargetNum">33</strong> counts!
+        </p>
+        
+        <div class="celebrate-stats">
+          <div class="stat-box">
+            <span class="stat-num" id="statCompletedNum">33</span>
+            <span class="stat-name">Completed</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-num" id="statLapNum">#1</span>
+            <span class="stat-name">Cycle / Round</span>
+          </div>
+        </div>
+
+        <div class="modal-actions-vertical">
+          <button id="nextRoundBtn" class="btn btn-primary btn-full">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"></polyline>
+              <polyline points="1 20 1 14 7 14"></polyline>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
+            <span>Start Next Round (Reset to 0)</span>
+          </button>
+          <button id="continueCountBtn" class="btn btn-secondary btn-full">
+            <span>Continue Counting Beyond Target</span>
+          </button>
+          <button id="newTargetFromGoalBtn" class="btn btn-ghost btn-full">
+            <span>Set New Target Goal</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION CONTAINER -->
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <!-- CANVAS CONFETTI OVERLAY -->
+    <canvas id="confettiCanvas" class="confetti-canvas" aria-hidden="true"></canvas>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

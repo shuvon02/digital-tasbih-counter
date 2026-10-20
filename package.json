@@ -1,0 +1,25 @@
+{
+  "name": "tasbih-pro",
+  "version": "1.0.0",
+  "description": "Clean, responsive, mobile-first Tasbih and digital counter web app & PWA",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "tasbih",
+    "counter",
+    "pwa",
+    "mobile-first",
+    "dhikr",
+    "haptic"
+  ],
+  "author": "Antigravity",
+  "license": "MIT",
+  "dependencies": {
+    "@capacitor/android": "^8.5.3",
+    "@capacitor/cli": "^7.6.9",
+    "@capacitor/core": "^8.5.3"
+  }
+}
