@@ -1,46 +1,52 @@
-# 📿 Tasbih Pro — Modern Responsive Digital Counter (PWA / React Native / Flutter)
+# 📿 Tasbih Pro v1.1.0 — Advanced Digital Counter & Dhikr Companion
 
-A clean, responsive, mobile-first digital counter application designed for daily Dhikr, Tasbih, and general goal-oriented counting. Built with glassmorphic aesthetics, haptic vibration, synthetic physical click audio, target goal validation, and celebration confetti.
+A clean, responsive, mobile-first digital counter and Tasbih application designed for daily Dhikr, post-prayer recitations, and goal-oriented habit tracking. Features Arabic calligraphy, the 33-33-34 Auto-Chain mode, physical bead notches, multi-sound acoustic profiles, daily streaks tracking, and Zen focus mode.
+
+Available as a **Native Android APK**, an **Offline-First PWA**, and clean **React Native** & **Flutter** components.
 
 ---
 
-## ✨ Features & User Experience
+## 🌟 What's New in v1.1.0
 
-1. **Full-Screen Tap Zone:**
-   - The entire screen (excluding header & docked bottom controls) acts as an active tap zone.
-   - Micro-scale pulse feedback on tap.
-   - Ripple wave expands from exact touch/click coordinates (`(x, y)`).
-   - Floating `+1` particle rises and dissolves.
-   - Haptic vibration via `navigator.vibrate` and synthetic audio feedback via Web Audio API (100% offline, zero audio file dependencies).
+1. **📿 Arabic Calligraphy & Dhikr Library:**
+   - Real-time Arabic calligraphy rendered using Google Font **Amiri**.
+   - Displays Arabic phrase, English transliteration, and meaning with a gold shimmer animation on each tap.
+   - Presets: *SubhanAllah (33)*, *Alhamdulillah (33)*, *Allahu Akbar (34)*, *Astaghfirullah (100)*, *La ilaha illallah (100)*, *Durood (100)*, and custom counters.
 
-2. **Target Validation & Lock Logic (Crucial):**
-   - **Guaranteed Validation:** Tapping the screen without setting a valid positive integer target **strictly prevents incrementing**.
-   - Triggers an animated warning modal (*"Please set a target goal first to begin counting!"*) with a shake animation, warning audio cue, and direct focus on the target input.
-   - Preset chips (`33`, `99`, `100`, `313`, `1000`) allow instant one-tap goal selection.
+2. **⚡ Auto-Chain Mode (Tasbih of Fatimah):**
+   - Seamlessly guides you through the traditional post-prayer sequence:
+     1. **SubhanAllah** (33) ➔
+     2. **Alhamdulillah** (33) ➔
+     3. **Allahu Akbar** (34) ➔
+     4. Grand Confetti Celebration upon completing 100 recitations!
 
-3. **Celebration Effect:**
-   - Multi-colored confetti burst powered by a zero-dependency Canvas Confetti engine.
-   - Celebratory victory arpeggio chime via Web Audio API.
-   - Celebration modal displaying completed count and round/lap number.
-   - Options to:
-     - *Start Next Round* (increments lap, resets count to 0, retains goal)
-     - *Continue Counting Beyond Target*
-     - *Set New Target Goal*
+3. **🟢 33 Physical Beads on Progress Ring:**
+   - 33 interactive bead notches positioned around the circular SVG track.
+   - Beads illuminate with an emerald glow as you progress, with the current bead pulsing in warm gold.
 
-4. **Docked Control Card:**
-   - Docked unobtrusively at the bottom with safe area insets for notched mobile devices.
-   - Target input field with clear button.
-   - **Set Target** confirm button.
-   - **Reset** button with a confirmation modal (*"Are you sure you want to clear your count of X?"*) to prevent accidental taps.
+4. **🪵 Multi-Sound Synthesizer Profiles (100% Offline):**
+   - 🪵 **Wooden Bead Click** (Authentic resonant acoustic woodblock)
+   - 💧 **Water Droplet** (Meditative zen pebble drop)
+   - ⚙️ **Mechanical Tally Clicker** (Crisp tactile click)
+   - 🎵 **Gentle Chime** (Soft harmonic bell tone)
+   - 🔕 **Mute / Silent** (Haptics only)
 
-5. **Aesthetics & Themes:**
-   - 4 switchable color themes:
-     - 🌿 **Emerald Sanctuary** (Rich Islamic dark green & gold)
-     - 🌌 **Midnight Obsidian** (Deep OLED black & indigo/violet)
-     - 👑 **Royal Gold** (Onyx black & warm amber gold)
-     - ⚪ **Pearl Minimalist** (Clean high-contrast light mode)
-   - SVG Circular Progress Ring with smooth gradient glow.
-   - Mobile gestures: `user-select: none`, `touch-action: manipulation`, no double-tap-to-zoom.
+5. **🔥 Daily History & Streaks Drawer:**
+   - Tap the stats icon to track consecutive active days (`🔥 Daily Streak`).
+   - Today's Total counts and Lifetime all-time tally.
+   - Breakdown of counts by specific Dhikr phrase.
+
+6. **🧘 Zen / Focus Mode:**
+   - Tap the Focus icon (or press `Z`) to hide all headers and control cards.
+   - Provides an OLED pure-black screen with glowing Arabic calligraphy and ripple waves for distraction-free night recitations.
+
+---
+
+## 📦 Download Android APK (v1.1.0)
+
+- **Direct GitHub Download:** [**Download `tasbih-pro.apk`**](https://github.com/shuvon02/digital-tasbih-counter/releases/download/v1.1.0/tasbih-pro.apk)
+- **GitHub Release Page:** [https://github.com/shuvon02/digital-tasbih-counter/releases/tag/v1.1.0](https://github.com/shuvon02/digital-tasbih-counter/releases/tag/v1.1.0)
+- **Local File in Repository:** [`tasbih-pro.apk`](file:///d:/tasbih/tasbih-pro.apk) (~3.03 MB signed release build)
 
 ---
 
@@ -61,41 +67,26 @@ http://localhost:3000
 ```
 
 ### Installing as a Mobile PWA
+- **Android (Chrome):** Tap three dots menu (⋮) ➔ Select **"Install App"** or **"Add to Home Screen"**.
 - **iOS (Safari):** Tap the Share button ➔ Select **"Add to Home Screen"**.
-- **Android (Chrome):** Tap the three dots menu ➔ Select **"Install App"** or **"Add to Home Screen"**.
 
 ---
 
-## 📦 Android APK (Ready to Install)
-
-The native Android APK has been compiled and published:
-
-- **Direct GitHub Release Download:** [**Download `tasbih-pro.apk` (v1.0.0)**](https://github.com/shuvon02/digital-tasbih-counter/releases/download/v1.0.0/tasbih-pro.apk)
-- **GitHub Release Page:** [https://github.com/shuvon02/digital-tasbih-counter/releases/tag/v1.0.0](https://github.com/shuvon02/digital-tasbih-counter/releases/tag/v1.0.0)
-- **Local File in Repository:** [`tasbih-pro.apk`](file:///d:/tasbih/tasbih-pro.apk) (3.88 MB)
-- **Local Network Wi-Fi Download:** If your phone and PC are on the same Wi-Fi, open this URL on your phone browser:
-  ```
-  http://192.168.0.102:3000/tasbih-pro.apk
-  ```
-
-### How to Install on Android:
-1. Transfer `tasbih-pro.apk` to your phone via USB, Google Drive, WhatsApp, or by downloading it from the local server link above.
-2. Tap the downloaded `.apk` file on your phone.
-3. If prompted, allow *"Install from unknown sources"* or *"Install unknown apps"*.
-4. Tap **Install** and enjoy Tasbih Pro natively on your mobile phone!
+## 📱 Multi-Platform Implementations Included
 
 | Platform | Location | Description |
 |---|---|---|
-| **PWA / Web** | [`index.html`](file:///d:/tasbih/index.html), [`styles.css`](file:///d:/tasbih/styles.css), [`app.js`](file:///d:/tasbih/app.js) | Full-screen PWA with Web Audio, SVG ring, canvas confetti & local storage |
-| **React Native** | [`react_native/TasbihCounterScreen.tsx`](file:///d:/tasbih/react_native/TasbihCounterScreen.tsx) | Complete TypeScript component with `Pressable`, `Animated`, `Vibration`, & modal handling |
+| **PWA / Web** | [`index.html`](file:///d:/tasbih/index.html), [`styles.css`](file:///d:/tasbih/styles.css), [`app.js`](file:///d:/tasbih/app.js) | Advanced PWA with Web Audio, beads ring, auto-chain & history |
+| **Android APK** | [`tasbih-pro.apk`](file:///d:/tasbih/tasbih-pro.apk) | Signed Release APK (API 34/35 compatible) |
+| **React Native** | [`react_native/TasbihCounterScreen.tsx`](file:///d:/tasbih/react_native/TasbihCounterScreen.tsx) | Complete TypeScript screen with `Animated`, `Vibration`, & modal handling |
 | **Flutter** | [`flutter/tasbih_counter_screen.dart`](file:///d:/tasbih/flutter/tasbih_counter_screen.dart) | Complete Dart widget with `HapticFeedback`, `AnimationController`, & circular progress |
 
 ---
 
-## ⌨️ Desktop Keyboard Shortcuts
+## ⌨️ Desktop Shortcuts
 
-- **Spacebar**: Tap to increment counter
+- **Spacebar / ArrowUp**: Tap to increment counter
 - **T**: Focus target input
 - **R**: Trigger Reset confirmation modal
-- **Enter** (while typing target): Lock in target goal
-- **Escape**: Close any active modal
+- **Z**: Toggle Zen Focus Mode
+- **Escape**: Close modals or exit Zen Mode
