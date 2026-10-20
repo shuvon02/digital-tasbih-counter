@@ -279,6 +279,9 @@ button, input {
 }
 
 .brand-title {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
   font-size: 1.05rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -286,6 +289,20 @@ button, input {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   line-height: 1.15;
+}
+
+.version-tag {
+  display: inline-block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 0.12rem 0.45rem;
+  border-radius: 6px;
+  background: rgba(251, 191, 36, 0.2);
+  border: 1px solid var(--accent-gold);
+  color: var(--accent-gold);
+  -webkit-text-fill-color: var(--accent-gold);
+  letter-spacing: 0.04em;
+  vertical-align: middle;
 }
 
 .brand-subtitle {

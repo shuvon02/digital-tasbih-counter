@@ -42,11 +42,11 @@ Available as a **Native Android APK**, an **Offline-First PWA**, and clean **Rea
 
 ---
 
-## 📦 Download Android APK (v1.1.0)
+## 📦 Download Android APK (v1.2.0)
 
-- **Direct GitHub Download:** [**Download `tasbih-pro.apk`**](https://github.com/shuvon02/digital-tasbih-counter/releases/download/v1.1.0/tasbih-pro.apk)
-- **GitHub Release Page:** [https://github.com/shuvon02/digital-tasbih-counter/releases/tag/v1.1.0](https://github.com/shuvon02/digital-tasbih-counter/releases/tag/v1.1.0)
-- **Local File in Repository:** [`tasbih-pro.apk`](file:///d:/tasbih/tasbih-pro.apk) (~3.03 MB signed release build)
+- **Direct GitHub Download:** [**Download `tasbih-pro-v1.2.0.apk`**](https://github.com/shuvon02/digital-tasbih-counter/releases/download/v1.2.0/tasbih-pro-v1.2.0.apk)
+- **GitHub Release Page:** [https://github.com/shuvon02/digital-tasbih-counter/releases/tag/v1.2.0](https://github.com/shuvon02/digital-tasbih-counter/releases/tag/v1.2.0)
+- **Local File in Repository:** [`tasbih-pro-v1.2.0.apk`](file:///d:/tasbih/tasbih-pro-v1.2.0.apk) (~3.03 MB signed release build, `versionCode 3`)
 
 ---
 
