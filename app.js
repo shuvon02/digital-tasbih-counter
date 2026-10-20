@@ -200,6 +200,7 @@ class TasbihApp {
    * Initialize state, event listeners, beads, and UI
    */
   init() {
+    this.purgeStaleCaches();
     this.loadState();
     this.checkStreakDay();
     this.setupProgressRing();
@@ -209,6 +210,34 @@ class TasbihApp {
     this.updateSoundUI();
     this.updateUI();
     this.registerServiceWorker();
+  }
+
+  purgeStaleCaches() {
+    // If running in Capacitor Android Native app, unregister any service worker
+    // and wipe cache storage so fresh native assets are always used!
+    const isCapacitor = Boolean(
+      window.Capacitor ||
+      (window.location.hostname === 'localhost' && window.location.protocol === 'https:') ||
+      navigator.userAgent.includes('wv')
+    );
+
+    if (isCapacitor && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (let registration of registrations) {
+          registration.unregister();
+        }
+      });
+    }
+
+    if ('caches' in window) {
+      caches.keys().then((keys) => {
+        keys.forEach((key) => {
+          if (isCapacitor || key !== 'tasbih-pro-v2') {
+            caches.delete(key);
+          }
+        });
+      });
+    }
   }
 
   /**
@@ -1335,10 +1364,19 @@ class TasbihApp {
   }
 
   registerServiceWorker() {
+    const isCapacitor = Boolean(
+      window.Capacitor ||
+      (window.location.hostname === 'localhost' && window.location.protocol === 'https:') ||
+      navigator.userAgent.includes('wv')
+    );
+    if (isCapacitor) return;
+
     if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
       navigator.serviceWorker
         .register('./sw.js')
-        .then(() => console.log('ServiceWorker registered'))
+        .then((reg) => {
+          reg.update();
+        })
         .catch(() => {});
     }
   }
