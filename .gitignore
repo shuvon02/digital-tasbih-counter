@@ -11,9 +11,10 @@ android/.idea/
 android/*.iml
 android/app/*.iml
 
-# OS files
+# OS & IDE files
 .DS_Store
 Thumbs.db
+.vscode/
 
 # Keep the compiled APK in root as requested
 !tasbih-pro.apk

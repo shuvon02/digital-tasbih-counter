@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Tasbih & Digital Counter | Modern PWA</title>
-  <meta name="description" content="A clean, responsive, mobile-first digital counter and Tasbih web app with full-screen tap zone, target goal tracking, audio-haptic feedback, and celebration effects.">
-  <meta name="theme-color" content="#0d1b18">
+  <title>Tasbih Pro | Digital Counter & Dhikr Companion</title>
+  <meta name="description" content="A clean, responsive, mobile-first digital counter and Tasbih web app with Arabic calligraphy, auto-chain post-prayer mode, physical beads, realistic audio profiles, and daily streak tracking.">
+  <meta name="theme-color" content="#071512">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -14,18 +14,19 @@
   <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
 
-  <!-- Google Fonts: Outfit and JetBrains Mono for pristine digital readability -->
+  <!-- Google Fonts: Amiri (Arabic), Outfit (UI), JetBrains Mono (Numbers) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700;800&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div id="app" class="app-container">
-    <!-- Background Ambient Glow Effects -->
+    <!-- Background Ambient Glow & Pulse Waves -->
     <div class="ambient-glow glow-top" aria-hidden="true"></div>
     <div class="ambient-glow glow-bottom" aria-hidden="true"></div>
+    <div id="ambientPulse" class="ambient-pulse" aria-hidden="true"></div>
 
     <!-- Header Bar (Compact & Sleek) -->
     <header class="app-header" id="appHeader">
@@ -41,35 +42,41 @@
         </div>
         <div class="brand-text">
           <h1 class="brand-title">TASBIH PRO</h1>
-          <span class="brand-subtitle" id="statusBadge">Goal Inactive</span>
+          <span class="brand-subtitle" id="statusBadge">Auto-Chain Active</span>
         </div>
       </div>
 
       <div class="header-actions">
-        <!-- Sound Toggle -->
-        <button id="soundToggleBtn" class="icon-btn" aria-label="Toggle Sound" title="Sound Effects">
-          <svg id="soundOnIcon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <!-- Dhikr Presets Picker Trigger -->
+        <button id="dhikrPickerBtn" class="icon-btn" aria-label="Select Dhikr Phrase" title="Select Dhikr">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+        </button>
+
+        <!-- Sound Profile Picker Trigger -->
+        <button id="soundProfileBtn" class="icon-btn active" aria-label="Sound Profiles" title="Sound Effects">
+          <svg id="soundHeaderIcon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
             <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
             <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
           </svg>
-          <svg id="soundOffIcon" class="hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <line x1="23" y1="9" x2="17" y2="15"></line>
-            <line x1="17" y1="9" x2="23" y2="15"></line>
+        </button>
+
+        <!-- Daily History & Streaks Drawer Trigger -->
+        <button id="historyDrawerBtn" class="icon-btn" aria-label="View Daily History & Streaks" title="History & Streaks">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
           </svg>
         </button>
 
-        <!-- Haptic / Vibrate Toggle -->
-        <button id="hapticToggleBtn" class="icon-btn" aria-label="Toggle Haptic Feedback" title="Vibration Feedback">
-          <svg id="hapticIcon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="7" y="2" width="10" height="20" rx="3"></rect>
-            <line x1="2" y1="8" x2="4" y2="8"></line>
-            <line x1="2" y1="12" x2="4" y2="12"></line>
-            <line x1="2" y1="16" x2="4" y2="16"></line>
-            <line x1="20" y1="8" x2="22" y2="8"></line>
-            <line x1="20" y1="12" x2="22" y2="12"></line>
-            <line x1="20" y1="16" x2="22" y2="16"></line>
+        <!-- Zen / Focus Mode Toggle -->
+        <button id="zenModeBtn" class="icon-btn" aria-label="Enter Zen Focus Mode" title="Zen Focus Mode">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
           </svg>
         </button>
 
@@ -81,23 +88,40 @@
             <line x1="12" y1="21" x2="12" y2="23"></line>
             <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
             <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
             <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
           </svg>
         </button>
       </div>
     </header>
 
+    <!-- AUTO-CHAIN PROGRESS BANNER -->
+    <div id="chainBanner" class="chain-banner" aria-live="polite">
+      <div class="chain-badge">
+        <span class="chain-icon">⚡</span>
+        <span id="chainStepText">Step 1/3: SubhanAllah (33)</span>
+      </div>
+      <div class="chain-dots">
+        <span class="chain-dot active" id="dot1"></span>
+        <span class="chain-dot" id="dot2"></span>
+        <span class="chain-dot" id="dot3"></span>
+      </div>
+    </div>
+
     <!-- FULL SCREEN ACTIVE TAP ZONE -->
-    <main id="tapZone" class="tap-zone" role="button" tabindex="0" aria-label="Tap anywhere to count">
+    <main id="tapZone" class="tap-zone" role="button" tabindex="0" aria-label="Tap anywhere on screen to count">
       <!-- Floating Particles Container -->
       <div id="particleContainer" class="particle-container" aria-hidden="true"></div>
 
-      <!-- Central Display Area with Progress Ring -->
+      <!-- ARABIC CALLIGRAPHY & PHRASE DISPLAY -->
+      <div class="phrase-display" id="phraseDisplay">
+        <div class="arabic-text" id="arabicText">سُبْحَانَ ٱللَّٰهِ</div>
+        <div class="transliteration-text" id="transliterationText">Subḥān Allāh</div>
+        <div class="meaning-text" id="meaningText">"Glory be to Allah"</div>
+      </div>
+
+      <!-- Central Display Area with Physical Bead Ring -->
       <div class="display-container" id="displayContainer">
-        <!-- SVG Circular Progress Ring -->
+        <!-- SVG Circular Progress Ring with 33 Physical Beads -->
         <div class="progress-ring-wrapper">
           <svg class="progress-ring" viewBox="0 0 320 320" width="300" height="300">
             <defs>
@@ -114,6 +138,8 @@
             <circle class="ring-track" cx="160" cy="160" r="136" />
             <!-- Active Animated Fill -->
             <circle id="progressCircle" class="ring-fill" cx="160" cy="160" r="136" filter="url(#glowFilter)" />
+            <!-- Container for 33 Dynamic Bead SVG Circles -->
+            <g id="beadsGroup" class="beads-group"></g>
           </svg>
 
           <!-- Core Numbers inside the ring -->
@@ -125,7 +151,7 @@
             
             <div class="target-meta" id="targetMeta">
               <span class="meta-label">TARGET:</span>
-              <span id="targetValueDisplay" class="meta-value">NOT SET</span>
+              <span id="targetValueDisplay" class="meta-value">33</span>
             </div>
 
             <!-- Percentage badge -->
@@ -139,10 +165,19 @@
         <div class="tap-hint-wrapper">
           <p id="tapHint" class="tap-hint">
             <span class="pulse-dot"></span>
-            <span id="tapHintText">Tap anywhere on the screen</span>
+            <span id="tapHintText">Tap anywhere to count (Goal: 33)</span>
           </p>
         </div>
       </div>
+
+      <!-- Zen Mode Exit Pill (Only shown during Zen Mode) -->
+      <button id="exitZenBtn" class="exit-zen-btn hidden" aria-label="Exit Zen Focus Mode">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+        <span>Exit Focus Mode</span>
+      </button>
     </main>
 
     <!-- DOCKED BOTTOM CONTROL CARD -->
@@ -151,10 +186,11 @@
         <!-- Drag Handle for Mobile Elegance -->
         <div class="card-handle" aria-hidden="true"></div>
 
-        <!-- Target Preset Quick Chips -->
+        <!-- Target Preset Quick Chips & Modes -->
         <div class="preset-chips-row">
           <span class="preset-label">Quick:</span>
           <div class="chips-scroll">
+            <button class="chip-btn chip-chain selected" id="chipChainMode" data-target="33">⚡ 33-33-34 Chain</button>
             <button class="chip-btn" data-target="33">33</button>
             <button class="chip-btn" data-target="99">99</button>
             <button class="chip-btn" data-target="100">100</button>
@@ -169,10 +205,9 @@
             <label for="targetInput" class="input-label">
               <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <circle cx="12" cy="12" r="10"></circle>
-                <circle cx="12" cy="12" r="6"></circle>
-                <circle cx="12" cy="12" r="2"></circle>
+                <circle cx="12" cy="6" r="1.5" fill="currentColor"></circle>
               </svg>
-              Target
+              Target Goal
             </label>
             <div class="input-wrapper">
               <input 
@@ -185,6 +220,7 @@
                 inputmode="numeric" 
                 pattern="[0-9]*"
                 autocomplete="off"
+                value="33"
               >
               <button type="button" id="clearInputBtn" class="clear-input-btn hidden" aria-label="Clear Input">&times;</button>
             </div>
@@ -212,7 +248,162 @@
       </div>
     </footer>
 
-    <!-- MODAL 1: Target Required Warning Modal (Crucial requirement #3) -->
+    <!-- MODAL 1: DHIKR PRESETS & PHRASE SELECTOR -->
+    <div id="dhikrModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="dhikrModalTitle">
+      <div class="modal-card modal-large-card animate-pop">
+        <div class="modal-header-row">
+          <h3 id="dhikrModalTitle" class="modal-title">Select Dhikr & Mode</h3>
+          <button id="closeDhikrModalBtn" class="modal-close-icon-btn" aria-label="Close">&times;</button>
+        </div>
+
+        <div class="dhikr-list-scroll">
+          <!-- Featured Auto-Chain Mode -->
+          <div class="dhikr-card dhikr-card-featured" data-mode="chain">
+            <div class="dhikr-card-badge">RECOMMENDED FOR POST-PRAYER</div>
+            <div class="dhikr-card-arabic">سُبْحَانَ ٱللَّٰهِ ➔ ٱلْحَمْدُ لِلَّٰهِ ➔ ٱللَّٰهُ أَكْبَرُ</div>
+            <div class="dhikr-card-trans">Tasbih of Fatimah (Auto-Chain)</div>
+            <div class="dhikr-card-desc">33x SubhanAllah ➔ 33x Alhamdulillah ➔ 34x Allahu Akbar (Total: 100)</div>
+          </div>
+
+          <!-- Single Presets -->
+          <div class="dhikr-card" data-phrase="subhanallah" data-arabic="سُبْحَانَ ٱللَّٰهِ" data-trans="Subḥān Allāh" data-meaning="Glory be to Allah" data-target="33">
+            <div class="dhikr-card-arabic">سُبْحَانَ ٱللَّٰهِ</div>
+            <div class="dhikr-card-trans">SubhanAllah (33)</div>
+            <div class="dhikr-card-desc">Glory be to Allah</div>
+          </div>
+
+          <div class="dhikr-card" data-phrase="alhamdulillah" data-arabic="ٱلْحَمْدُ لِلَّٰهِ" data-trans="Al-ḥamdu lillāh" data-meaning="All praise is due to Allah" data-target="33">
+            <div class="dhikr-card-arabic">ٱلْحَمْدُ لِلَّٰهِ</div>
+            <div class="dhikr-card-trans">Alhamdulillah (33)</div>
+            <div class="dhikr-card-desc">All praise is due to Allah</div>
+          </div>
+
+          <div class="dhikr-card" data-phrase="allahuakbar" data-arabic="ٱللَّٰهُ أَكْبَرُ" data-trans="Allāhu Akbar" data-meaning="Allah is the Greatest" data-target="34">
+            <div class="dhikr-card-arabic">ٱللَّٰهُ أَكْبَرُ</div>
+            <div class="dhikr-card-trans">Allahu Akbar (34)</div>
+            <div class="dhikr-card-desc">Allah is the Greatest</div>
+          </div>
+
+          <div class="dhikr-card" data-phrase="astaghfirullah" data-arabic="أَسْتَغْفِرُ ٱللَّٰهَ" data-trans="Astaghfirullāh" data-meaning="I seek forgiveness from Allah" data-target="100">
+            <div class="dhikr-card-arabic">أَسْتَغْفِرُ ٱللَّٰهَ</div>
+            <div class="dhikr-card-trans">Astaghfirullah (100)</div>
+            <div class="dhikr-card-desc">I seek forgiveness from Allah</div>
+          </div>
+
+          <div class="dhikr-card" data-phrase="lailahaillallah" data-arabic="لَا إِلَٰهَ إِلَّا ٱللَّٰهُ" data-trans="Lā ilāha illallāh" data-meaning="There is no god but Allah" data-target="100">
+            <div class="dhikr-card-arabic">لَا إِلَٰهَ إِلَّا ٱللَّٰهُ</div>
+            <div class="dhikr-card-trans">La ilaha illallah (100)</div>
+            <div class="dhikr-card-desc">There is no god but Allah</div>
+          </div>
+
+          <div class="dhikr-card" data-phrase="durood" data-arabic="اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ" data-trans="Allāhumma ṣalli 'alā Muḥammad" data-meaning="Blessings upon the Prophet" data-target="100">
+            <div class="dhikr-card-arabic">اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ</div>
+            <div class="dhikr-card-trans">Durood / Salawat (100)</div>
+            <div class="dhikr-card-desc">Blessings upon Prophet Muhammad ﷺ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL 2: SOUND PROFILES SELECTOR -->
+    <div id="soundProfileModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="soundModalTitle">
+      <div class="modal-card modal-compact-card animate-pop">
+        <div class="modal-header-row">
+          <h3 id="soundModalTitle" class="modal-title">Acoustic Feedback</h3>
+          <button id="closeSoundModalBtn" class="modal-close-icon-btn" aria-label="Close">&times;</button>
+        </div>
+        <p class="modal-description">Synthesized 100% offline via Web Audio API.</p>
+
+        <div class="sound-options-list">
+          <button class="sound-option-btn selected" data-sound="wood">
+            <div class="sound-option-info">
+              <span class="sound-option-name">🪵 Wooden Bead</span>
+              <span class="sound-option-desc">Resonant woodblock acoustic pop</span>
+            </div>
+            <span class="sound-check">✓</span>
+          </button>
+
+          <button class="sound-option-btn" data-sound="water">
+            <div class="sound-option-info">
+              <span class="sound-option-name">💧 Water Droplet</span>
+              <span class="sound-option-desc">Zen relaxing harmonic droplet</span>
+            </div>
+            <span class="sound-check"></span>
+          </button>
+
+          <button class="sound-option-btn" data-sound="mechanical">
+            <div class="sound-option-info">
+              <span class="sound-option-name">⚙️ Mechanical Tally</span>
+              <span class="sound-option-desc">Crisp tactile physical click</span>
+            </div>
+            <span class="sound-check"></span>
+          </button>
+
+          <button class="sound-option-btn" data-sound="synth">
+            <div class="sound-option-info">
+              <span class="sound-option-name">🎵 Gentle Chime</span>
+              <span class="sound-option-desc">Subtle sine tone</span>
+            </div>
+            <span class="sound-check"></span>
+          </button>
+
+          <button class="sound-option-btn" data-sound="mute">
+            <div class="sound-option-info">
+              <span class="sound-option-name">🔕 Mute (Silent)</span>
+              <span class="sound-option-desc">Vibration haptic only</span>
+            </div>
+            <span class="sound-check"></span>
+          </button>
+        </div>
+
+        <div class="haptic-toggle-row">
+          <span class="haptic-toggle-label">Vibration Haptics</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="hapticCheckbox" checked>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- DRAWER: DAILY HISTORY & STREAKS -->
+    <div id="historyDrawer" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="historyDrawerTitle">
+      <div class="modal-card modal-large-card animate-pop">
+        <div class="modal-header-row">
+          <h3 id="historyDrawerTitle" class="modal-title">Activity & Streaks</h3>
+          <button id="closeHistoryDrawerBtn" class="modal-close-icon-btn" aria-label="Close">&times;</button>
+        </div>
+
+        <div class="history-metrics-grid">
+          <div class="metric-card">
+            <span class="metric-icon">🔥</span>
+            <span class="metric-val" id="metricStreak">1 Day</span>
+            <span class="metric-title">Daily Streak</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-icon">✨</span>
+            <span class="metric-val" id="metricToday">0</span>
+            <span class="metric-title">Today's Total</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-icon">🏆</span>
+            <span class="metric-val" id="metricLifetime">0</span>
+            <span class="metric-title">Lifetime Total</span>
+          </div>
+        </div>
+
+        <h4 class="history-section-title">Today's Recitation Breakdown</h4>
+        <div class="history-breakdown-list" id="historyBreakdownList">
+          <div class="empty-history-text">No recitations recorded yet today. Begin counting!</div>
+        </div>
+
+        <button id="clearHistoryBtn" class="btn btn-ghost btn-full" style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-dim);">
+          Clear All History Data
+        </button>
+      </div>
+    </div>
+
+    <!-- MODAL 3: Target Required Warning Modal -->
     <div id="targetRequiredModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="targetRequiredTitle">
       <div class="modal-card modal-warning-card animate-pop">
         <div class="modal-icon-badge warning-badge">
@@ -234,7 +425,7 @@
         </div>
         <div class="modal-actions">
           <button id="focusTargetBtn" class="btn btn-primary btn-full">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
               <circle cx="12" cy="12" r="10"></circle>
               <circle cx="12" cy="12" r="2"></circle>
             </svg>
@@ -244,11 +435,11 @@
       </div>
     </div>
 
-    <!-- MODAL 2: Reset Confirmation Modal -->
+    <!-- MODAL 4: Reset Confirmation Modal -->
     <div id="resetConfirmModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="resetModalTitle">
       <div class="modal-card modal-danger-card animate-pop">
         <div class="modal-icon-badge danger-badge">
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
           </svg>
         </div>
@@ -263,18 +454,18 @@
       </div>
     </div>
 
-    <!-- MODAL 3: Celebration Goal Reached Modal -->
+    <!-- MODAL 5: Celebration Goal Reached Modal -->
     <div id="celebrationModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="celebrationTitle">
       <div class="modal-card modal-celebrate-card animate-pop">
         <div class="modal-icon-badge celebrate-badge">
-          <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
           </svg>
         </div>
-        <span class="celebrate-pill">TARGET COMPLETED</span>
+        <span class="celebrate-pill">GOAL COMPLETED</span>
         <h3 id="celebrationTitle" class="modal-title celebrate-heading">Masha'Allah! Goal Reached</h3>
         <p class="modal-description" id="celebrateDesc">
-          You have successfully completed <strong id="celebrateTargetNum">33</strong> counts!
+          You have successfully completed <strong id="celebrateTargetNum">33</strong> recitations!
         </p>
         
         <div class="celebrate-stats">
@@ -290,7 +481,7 @@
 
         <div class="modal-actions-vertical">
           <button id="nextRoundBtn" class="btn btn-primary btn-full">
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
               <polyline points="23 4 23 10 17 10"></polyline>
               <polyline points="1 20 1 14 7 14"></polyline>
               <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
@@ -301,7 +492,7 @@
             <span>Continue Counting Beyond Target</span>
           </button>
           <button id="newTargetFromGoalBtn" class="btn btn-ghost btn-full">
-            <span>Set New Target Goal</span>
+            <span>Select Different Dhikr Goal</span>
           </button>
         </div>
       </div>

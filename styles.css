@@ -11,7 +11,7 @@
   --bg-primary: #071512;
   --bg-secondary: #0d221e;
   --bg-surface: rgba(16, 38, 33, 0.75);
-  --bg-card: rgba(18, 45, 39, 0.88);
+  --bg-card: rgba(18, 45, 39, 0.92);
   --bg-glass: rgba(11, 33, 27, 0.85);
 
   --accent-primary: #10b981;
@@ -49,7 +49,7 @@
   --bg-primary: #090a0f;
   --bg-secondary: #121420;
   --bg-surface: rgba(22, 26, 42, 0.75);
-  --bg-card: rgba(25, 30, 50, 0.88);
+  --bg-card: rgba(25, 30, 50, 0.92);
   --bg-glass: rgba(16, 20, 36, 0.85);
 
   --accent-primary: #6366f1;
@@ -79,7 +79,7 @@
   --bg-primary: #120e09;
   --bg-secondary: #1e1810;
   --bg-surface: rgba(36, 28, 18, 0.75);
-  --bg-card: rgba(43, 33, 22, 0.88);
+  --bg-card: rgba(43, 33, 22, 0.92);
   --bg-glass: rgba(28, 22, 14, 0.85);
 
   --accent-primary: #f59e0b;
@@ -109,7 +109,7 @@
   --bg-primary: #f8fafc;
   --bg-secondary: #f1f5f9;
   --bg-surface: rgba(255, 255, 255, 0.85);
-  --bg-card: rgba(255, 255, 255, 0.95);
+  --bg-card: rgba(255, 255, 255, 0.96);
   --bg-glass: rgba(248, 250, 252, 0.9);
 
   --accent-primary: #0284c7;
@@ -150,12 +150,12 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  position: fixed; /* Prevents bounce scroll on iOS */
+  position: fixed;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   
-  /* Mobile-first critical prevention */
+  /* Mobile-first ergonomics */
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
@@ -179,13 +179,14 @@ button, input {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  height: 100dvh; /* Dynamic viewport height for mobile browsers */
+  height: 100dvh;
   position: relative;
   background: radial-gradient(circle at 50% 20%, var(--bg-secondary) 0%, var(--bg-primary) 80%);
   overflow: hidden;
+  transition: all 0.4s ease;
 }
 
-/* Ambient glow orbs */
+/* Ambient glow & pulse */
 .ambient-glow {
   position: absolute;
   border-radius: 50%;
@@ -197,8 +198,8 @@ button, input {
 }
 
 .glow-top {
-  width: 340px;
-  height: 340px;
+  width: 360px;
+  height: 360px;
   top: -100px;
   left: 50%;
   transform: translateX(-50%);
@@ -215,8 +216,28 @@ button, input {
   opacity: 0.15;
 }
 
+.ambient-pulse {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.3s ease;
+}
+
+.ambient-pulse.pulse-active {
+  animation: bgPulseFlash 0.45s ease-out;
+}
+
+@keyframes bgPulseFlash {
+  0% { opacity: 0.18; transform: scale(0.95); }
+  50% { opacity: 0.08; }
+  100% { opacity: 0; transform: scale(1.05); }
+}
+
 /* --------------------------------------------------------------------------
-   APP HEADER (Compact, Docked Top)
+   APP HEADER
    -------------------------------------------------------------------------- */
 .app-header {
   position: relative;
@@ -224,18 +245,19 @@ button, input {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: clamp(0.75rem, 2vh, 1.1rem) clamp(1rem, 4vw, 1.5rem);
-  padding-top: max(clamp(0.75rem, 2vh, 1.1rem), env(safe-area-inset-top));
+  padding: clamp(0.6rem, 1.8vh, 0.95rem) clamp(0.9rem, 3.5vw, 1.4rem);
+  padding-top: max(clamp(0.6rem, 1.8vh, 0.95rem), env(safe-area-inset-top));
   background: var(--bg-surface);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--border-light);
+  transition: transform 0.35s ease, opacity 0.35s ease;
 }
 
 .brand {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.6rem;
 }
 
 .brand-logo {
@@ -267,35 +289,26 @@ button, input {
 }
 
 .brand-subtitle {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: var(--text-dim);
-  transition: color 0.3s ease;
-}
-
-.brand-subtitle.active {
   color: var(--accent-primary);
-}
-
-.brand-subtitle.goal-met {
-  color: var(--accent-gold);
-  font-weight: 700;
+  transition: color 0.3s ease;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
 }
 
 .icon-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   border-radius: 10px;
   background: var(--bg-card);
   border: 1px solid var(--border-light);
@@ -320,8 +333,122 @@ button, input {
   border-color: var(--accent-primary);
 }
 
-.hidden {
-  display: none !important;
+/* --------------------------------------------------------------------------
+   AUTO-CHAIN BANNER
+   -------------------------------------------------------------------------- */
+.chain-banner {
+  position: relative;
+  z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0.4rem auto 0;
+  padding: 0.35rem 0.9rem;
+  border-radius: 9999px;
+  background: rgba(16, 38, 33, 0.85);
+  border: 1px solid var(--border-light);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  width: fit-content;
+  max-width: 90%;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.chain-banner.hidden {
+  display: none;
+}
+
+.chain-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+}
+
+.chain-icon {
+  font-size: 0.85rem;
+}
+
+.chain-dots {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: 0.75rem;
+}
+
+.chain-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--text-dim);
+  transition: all 0.3s ease;
+}
+
+.chain-dot.active {
+  background: var(--accent-gold);
+  box-shadow: 0 0 8px var(--accent-gold);
+  transform: scale(1.3);
+}
+
+.chain-dot.completed {
+  background: var(--accent-primary);
+}
+
+/* --------------------------------------------------------------------------
+   ARABIC CALLIGRAPHY & PHRASE DISPLAY
+   -------------------------------------------------------------------------- */
+.phrase-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin-top: 0.4rem;
+  margin-bottom: 0.3rem;
+  padding: 0 1rem;
+  z-index: 6;
+  pointer-events: none;
+  min-height: 80px;
+}
+
+.arabic-text {
+  font-family: 'Amiri', serif;
+  font-size: clamp(2.1rem, 7.5vw, 3rem);
+  font-weight: 700;
+  line-height: 1.25;
+  direction: rtl;
+  color: var(--text-primary);
+  text-shadow: 0 0 18px rgba(52, 211, 153, 0.35);
+  letter-spacing: 0.02em;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.arabic-text.pop-arabic {
+  animation: arabicShimmer 0.35s ease-out;
+}
+
+@keyframes arabicShimmer {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.06); color: var(--accent-gold); }
+  100% { transform: scale(1); }
+}
+
+.transliteration-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent-glow);
+  letter-spacing: 0.04em;
+  margin-top: 0.15rem;
+}
+
+.meaning-text {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--text-muted);
+  opacity: 0.85;
 }
 
 /* --------------------------------------------------------------------------
@@ -342,10 +469,10 @@ button, input {
   touch-action: manipulation;
   -webkit-user-select: none;
   user-select: none;
-  padding: 1rem 0;
+  padding: 0.5rem 0;
 }
 
-/* Visual ripple effect generated at tap position */
+/* Visual ripple effect */
 .tap-ripple {
   position: absolute;
   border-radius: 50%;
@@ -362,7 +489,7 @@ button, input {
     opacity: 0.65;
   }
   100% {
-    transform: translate(-50%, -50%) scale(4);
+    transform: translate(-50%, -50%) scale(4.2);
     opacity: 0;
   }
 }
@@ -382,7 +509,7 @@ button, input {
   font-weight: 800;
   font-size: 1.5rem;
   color: var(--accent-glow);
-  text-shadow: 0 0 12px var(--accent-primary);
+  text-shadow: 0 0 14px var(--accent-primary);
   pointer-events: none;
   animation: floatUpFade 0.75s cubic-bezier(0.2, 0.9, 0.4, 1) forwards;
   transform: translate(-50%, -50%);
@@ -411,7 +538,7 @@ button, input {
   justify-content: center;
   position: relative;
   z-index: 6;
-  pointer-events: none; /* Let taps fall through directly to .tap-zone */
+  pointer-events: none;
   transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -424,8 +551,8 @@ button, input {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: min(82vw, 320px);
-  height: min(82vw, 320px);
+  width: min(78vw, 300px);
+  height: min(78vw, 300px);
 }
 
 .progress-ring {
@@ -438,18 +565,46 @@ button, input {
 .ring-track {
   fill: transparent;
   stroke: var(--ring-track);
-  stroke-width: 14;
+  stroke-width: 12;
   transition: stroke 0.3s ease;
 }
 
 .ring-fill {
   fill: transparent;
   stroke: url(#ringGradient);
-  stroke-width: 14;
+  stroke-width: 12;
   stroke-linecap: round;
-  stroke-dasharray: 854.5; /* 2 * PI * 136 */
+  stroke-dasharray: 854.5;
   stroke-dashoffset: 854.5;
   transition: stroke-dashoffset 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 33 Physical Bead notches along the circle */
+.bead-dot {
+  fill: rgba(52, 211, 153, 0.2);
+  stroke: var(--border-light);
+  stroke-width: 1.5;
+  transition: all 0.25s ease;
+}
+
+.bead-dot.counted {
+  fill: var(--accent-glow);
+  stroke: var(--accent-primary);
+  filter: drop-shadow(0 0 3px var(--accent-glow));
+}
+
+.bead-dot.current {
+  fill: var(--accent-gold);
+  stroke: #ffffff;
+  stroke-width: 2;
+  r: 6.5;
+  filter: drop-shadow(0 0 6px var(--accent-gold));
+  animation: beadCurrentPulse 1.2s infinite;
+}
+
+@keyframes beadCurrentPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
 }
 
 .counter-content {
@@ -460,28 +615,28 @@ button, input {
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 1.5rem;
+  padding: 1.25rem;
 }
 
 .counter-label {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.15em;
   color: var(--text-dim);
   text-transform: uppercase;
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.1rem;
 }
 
 .counter-value-wrapper {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 90px;
+  min-height: 80px;
 }
 
 .counter-value {
   font-family: 'JetBrains Mono', monospace;
-  font-size: clamp(3.4rem, 15vw, 4.8rem);
+  font-size: clamp(3.2rem, 14vw, 4.6rem);
   font-weight: 800;
   line-height: 1;
   color: var(--text-primary);
@@ -494,28 +649,21 @@ button, input {
 }
 
 @keyframes numberPop {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-    color: var(--accent-glow);
-  }
-  100% {
-    transform: scale(1);
-  }
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); color: var(--accent-glow); }
+  100% { transform: scale(1); }
 }
 
 .target-meta {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  margin-top: 0.35rem;
-  font-size: 0.85rem;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+  font-size: 0.82rem;
 }
 
 .meta-label {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   color: var(--text-dim);
@@ -528,7 +676,7 @@ button, input {
 }
 
 .progress-badge {
-  margin-top: 0.65rem;
+  margin-top: 0.5rem;
   padding: 0.2rem 0.65rem;
   border-radius: 9999px;
   background: var(--bg-card);
@@ -549,19 +697,19 @@ button, input {
 
 /* Instructional hint */
 .tap-hint-wrapper {
-  margin-top: 1.25rem;
+  margin-top: 1rem;
 }
 
 .tap-hint {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.4rem 0.9rem;
+  padding: 0.35rem 0.85rem;
   border-radius: 9999px;
   background: rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(8px);
   border: 1px solid var(--border-light);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 500;
   color: var(--text-muted);
 }
@@ -576,18 +724,61 @@ button, input {
 }
 
 @keyframes pulseBlink {
-  0%, 100% {
-    opacity: 0.3;
-    transform: scale(0.8);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.3);
-  }
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+/* Zen Mode Exit Button */
+.exit-zen-btn {
+  position: absolute;
+  bottom: 2rem;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border-light);
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+}
+
+.exit-zen-btn:hover {
+  background: var(--bg-card);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
 }
 
 /* --------------------------------------------------------------------------
-   DOCKED CONTROL CARD (Compact Area at Bottom)
+   ZEN / FOCUS MODE STATE
+   -------------------------------------------------------------------------- */
+.app-container.zen-active .app-header {
+  transform: translateY(-110%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.app-container.zen-active .control-card-wrapper {
+  transform: translateY(120%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.app-container.zen-active .chain-banner {
+  opacity: 0.7;
+}
+
+.app-container.zen-active .exit-zen-btn {
+  display: flex !important;
+}
+
+/* --------------------------------------------------------------------------
+   DOCKED CONTROL CARD
    -------------------------------------------------------------------------- */
 .control-card-wrapper {
   position: relative;
@@ -595,8 +786,9 @@ button, input {
   width: 100%;
   max-width: 580px;
   margin: 0 auto;
-  padding: 0 1rem clamp(0.75rem, 2.5vh, 1.25rem);
-  padding-bottom: max(clamp(0.75rem, 2.5vh, 1.25rem), env(safe-area-inset-bottom));
+  padding: 0 1rem clamp(0.6rem, 2vh, 1.1rem);
+  padding-bottom: max(clamp(0.6rem, 2vh, 1.1rem), env(safe-area-inset-bottom));
+  transition: transform 0.35s ease, opacity 0.35s ease;
 }
 
 .control-card {
@@ -606,10 +798,10 @@ button, input {
   border-radius: 20px;
   border: 1px solid var(--border-light);
   box-shadow: var(--shadow-card);
-  padding: 0.85rem 1.1rem 1rem;
+  padding: 0.75rem 1rem 0.9rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.65rem;
   transition: transform 0.2s ease, border-color 0.3s ease;
 }
 
@@ -630,11 +822,11 @@ button, input {
 .preset-chips-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
 }
 
 .preset-label {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -644,7 +836,7 @@ button, input {
 .chips-scroll {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.35rem;
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -675,10 +867,6 @@ button, input {
   border-color: var(--accent-primary);
 }
 
-.chip-btn:active {
-  transform: scale(0.92);
-}
-
 .chip-btn.selected {
   background: var(--accent-primary);
   color: var(--btn-primary-text);
@@ -686,24 +874,35 @@ button, input {
   font-weight: 700;
 }
 
+.chip-btn.chip-chain {
+  color: var(--accent-gold);
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+.chip-btn.chip-chain.selected {
+  background: var(--accent-gold);
+  color: #071512;
+  font-weight: 800;
+}
+
 /* Target Input & Actions */
 .target-form {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.55rem;
 }
 
 .input-group {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.25rem;
 }
 
 .input-label {
   display: flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -719,23 +918,16 @@ button, input {
 
 .target-input {
   width: 100%;
-  height: 44px;
+  height: 42px;
   border-radius: 12px;
   background: var(--bg-primary);
   border: 1px solid var(--border-light);
   padding: 0 2.2rem 0 0.95rem;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-primary);
   transition: all 0.2s ease;
-}
-
-.target-input::placeholder {
-  font-family: 'Outfit', sans-serif;
-  font-size: 0.88rem;
-  font-weight: 400;
-  color: var(--text-dim);
 }
 
 .target-input:focus {
@@ -746,8 +938,8 @@ button, input {
 .clear-input-btn {
   position: absolute;
   right: 8px;
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   background: var(--bg-surface);
   color: var(--text-muted);
@@ -757,10 +949,6 @@ button, input {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-}
-
-.clear-input-btn:hover {
-  color: var(--text-primary);
 }
 
 .form-actions {
@@ -777,10 +965,10 @@ button, input {
   align-items: center;
   justify-content: center;
   gap: 0.45rem;
-  height: 44px;
-  padding: 0 1.25rem;
+  height: 42px;
+  padding: 0 1.15rem;
   border-radius: 12px;
-  font-size: 0.92rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
@@ -799,7 +987,6 @@ button, input {
 
 .btn-primary:hover {
   filter: brightness(1.08);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
 }
 
 .btn-secondary {
@@ -811,7 +998,6 @@ button, input {
 .btn-secondary:hover {
   background: var(--bg-primary);
   border-color: var(--text-muted);
-  color: var(--text-primary);
 }
 
 .btn-danger {
@@ -820,18 +1006,9 @@ button, input {
   box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
 }
 
-.btn-danger:hover {
-  filter: brightness(1.1);
-}
-
 .btn-ghost {
   background: transparent;
   color: var(--text-muted);
-}
-
-.btn-ghost:hover {
-  background: var(--bg-surface);
-  color: var(--text-primary);
 }
 
 .btn-full {
@@ -839,15 +1016,15 @@ button, input {
 }
 
 /* --------------------------------------------------------------------------
-   MODALS & BACKDROPS
+   MODALS, SHEETS & BACKDROPS
    -------------------------------------------------------------------------- */
 .modal-backdrop {
   position: fixed;
   inset: 0;
   z-index: 100;
-  background: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -863,16 +1040,57 @@ button, input {
 
 .modal-card {
   width: 100%;
-  max-width: 420px;
+  max-width: 440px;
+  max-height: 85vh;
+  overflow-y: auto;
   background: var(--bg-card);
   border-radius: 24px;
   border: 1px solid var(--border-light);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
-  padding: 1.6rem 1.4rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.75);
+  padding: 1.5rem 1.3rem;
   display: flex;
   flex-direction: column;
+}
+
+.modal-large-card {
+  max-width: 480px;
+}
+
+.modal-compact-card {
+  max-width: 380px;
+}
+
+.modal-header-row {
+  display: flex;
   align-items: center;
-  text-align: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 0.8rem;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.modal-close-icon-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.modal-close-icon-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-primary);
 }
 
 .animate-pop {
@@ -880,36 +1098,18 @@ button, input {
 }
 
 @keyframes modalScaleIn {
-  0% {
-    transform: scale(0.88) translateY(12px);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1) translateY(0);
-    opacity: 1;
-  }
-}
-
-/* Shake animation when user taps screen without target */
-.shake-warning {
-  animation: shakeKeyframes 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-}
-
-@keyframes shakeKeyframes {
-  10%, 90% { transform: translate3d(-2px, 0, 0); }
-  20%, 80% { transform: translate3d(4px, 0, 0); }
-  30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
-  40%, 60% { transform: translate3d(6px, 0, 0); }
+  0% { transform: scale(0.9) translateY(12px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
 }
 
 .modal-icon-badge {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
-  border-radius: 20px;
-  margin-bottom: 1rem;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  margin: 0 auto 0.9rem auto;
 }
 
 .warning-badge {
@@ -941,14 +1141,7 @@ button, input {
   background: var(--accent-gold-glow);
   color: var(--accent-gold);
   border: 1px solid var(--accent-gold);
-  margin-bottom: 0.4rem;
-}
-
-.modal-title {
-  font-size: 1.35rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.45rem;
+  margin: 0 auto 0.4rem auto;
 }
 
 .celebrate-heading {
@@ -956,29 +1149,27 @@ button, input {
   background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-align: center;
 }
 
 .modal-description {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--text-secondary);
   line-height: 1.5;
-  margin-bottom: 1.25rem;
-}
-
-.modal-description strong {
-  color: var(--accent-glow);
+  margin-bottom: 1.1rem;
+  text-align: center;
 }
 
 .modal-quick-chips {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
+  gap: 0.45rem;
+  margin-bottom: 1.1rem;
   flex-wrap: wrap;
   justify-content: center;
 }
 
 .quick-pick-btn {
-  padding: 0.4rem 0.9rem;
+  padding: 0.35rem 0.85rem;
   border-radius: 10px;
   background: var(--bg-surface);
   border: 1px solid var(--border-light);
@@ -996,10 +1187,6 @@ button, input {
   color: var(--accent-primary);
 }
 
-.modal-actions {
-  width: 100%;
-}
-
 .modal-actions-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1010,17 +1197,16 @@ button, input {
 .modal-actions-vertical {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.5rem;
   width: 100%;
 }
 
-/* Celebration statistics grid */
 .celebrate-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
   width: 100%;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.1rem;
 }
 
 .stat-box {
@@ -1030,6 +1216,7 @@ button, input {
   padding: 0.75rem;
   display: flex;
   flex-direction: column;
+  text-align: center;
 }
 
 .stat-num {
@@ -1045,6 +1232,272 @@ button, input {
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-top: 0.2rem;
+}
+
+/* --------------------------------------------------------------------------
+   DHIKR PRESETS LIST (Modal 1)
+   -------------------------------------------------------------------------- */
+.dhikr-list-scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  overflow-y: auto;
+  max-height: 60vh;
+  padding-right: 2px;
+}
+
+.dhikr-card {
+  padding: 0.85rem 1rem;
+  border-radius: 16px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.dhikr-card:hover {
+  background: var(--ring-track);
+  border-color: var(--accent-primary);
+  transform: translateY(-1px);
+}
+
+.dhikr-card:active {
+  transform: scale(0.98);
+}
+
+.dhikr-card-featured {
+  border-color: var(--accent-gold);
+  background: rgba(30, 24, 12, 0.8);
+  box-shadow: 0 4px 18px rgba(251, 191, 36, 0.15);
+}
+
+.dhikr-card-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--accent-gold);
+  margin-bottom: 0.3rem;
+}
+
+.dhikr-card-arabic {
+  font-family: 'Amiri', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  direction: rtl;
+  margin-bottom: 0.2rem;
+}
+
+.dhikr-card-trans {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--accent-glow);
+}
+
+.dhikr-card-desc {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   SOUND PROFILES LIST (Modal 2)
+   -------------------------------------------------------------------------- */
+.sound-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-bottom: 1rem;
+}
+
+.sound-option-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
+  border-radius: 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-align: left;
+}
+
+.sound-option-btn:hover {
+  border-color: var(--accent-primary);
+}
+
+.sound-option-btn.selected {
+  background: var(--ring-track);
+  border-color: var(--accent-primary);
+}
+
+.sound-option-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.sound-option-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.sound-option-desc {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.sound-check {
+  font-weight: 800;
+  color: var(--accent-primary);
+}
+
+.haptic-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.haptic-toggle-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: 9999px;
+  transition: 0.25s;
+}
+
+.toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 2px;
+  bottom: 2px;
+  background-color: var(--text-muted);
+  border-radius: 50%;
+  transition: 0.25s;
+}
+
+input:checked + .toggle-slider {
+  background-color: var(--accent-primary);
+}
+
+input:checked + .toggle-slider::before {
+  transform: translateX(20px);
+  background-color: #071512;
+}
+
+/* --------------------------------------------------------------------------
+   DAILY HISTORY & STREAKS DRAWER
+   -------------------------------------------------------------------------- */
+.history-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.55rem;
+  margin-bottom: 1.25rem;
+}
+
+.metric-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75rem 0.5rem;
+  border-radius: 14px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  text-align: center;
+}
+
+.metric-icon {
+  font-size: 1.25rem;
+  margin-bottom: 0.2rem;
+}
+
+.metric-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--accent-primary);
+}
+
+.metric-title {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  font-weight: 700;
+  margin-top: 0.15rem;
+}
+
+.history-section-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  margin-bottom: 0.6rem;
+}
+
+.history-breakdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  max-height: 35vh;
+  overflow-y: auto;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.85rem;
+  border-radius: 10px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-light);
+}
+
+.history-item-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.history-item-count {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--accent-glow);
+}
+
+.empty-history-text {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 1.5rem 0;
 }
 
 /* --------------------------------------------------------------------------
@@ -1106,14 +1559,8 @@ button, input {
 }
 
 @keyframes toastSlideDown {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px) scale(0.95);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+  0% { opacity: 0; transform: translateY(-20px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* --------------------------------------------------------------------------
@@ -1133,14 +1580,14 @@ button, input {
    -------------------------------------------------------------------------- */
 @media (min-width: 640px) {
   .progress-ring-wrapper {
-    width: 330px;
-    height: 330px;
+    width: 310px;
+    height: 310px;
   }
   .counter-value {
-    font-size: 5rem;
+    font-size: 4.8rem;
   }
   .control-card {
-    padding: 1.1rem 1.4rem;
+    padding: 0.9rem 1.3rem;
   }
   .target-form {
     flex-direction: row;
